@@ -8,11 +8,7 @@ export default function ContactsList({ contacts, onDeleteContact }) {
     <ListContact>
       {contacts.map(({ id, name, number }) => (
         <ElementContactsList key={id} name={name} number={number}>
-          {/* <p>
-            {name}: {number}
-          </p> */}
           <ButtonContact onClick={() => onDeleteContact(id)}>
-            {" "}
             Delete
           </ButtonContact>
         </ElementContactsList>
