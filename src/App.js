@@ -1,87 +1,60 @@
-import React, { Component } from "react";
+import React, { useState } from 'react';
 import { nanoid } from "nanoid";
 import { AppContainer, Title } from "./App.styled";
+import useLocalStorage from 'hooks/useLocalStorage';
 import Form from "./components/Form/Form";
 import Filter from "./components/Filter/Filter";
 import ContactsList from "./components/ContactsList/ContactsList";
-import contacts from "./contacts.json";
 
 
-class App extends Component {
-  state = {
-    contacts: contacts,
-    filter: "",
-  };
 
-  componentDidMount() {
-    const contacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(contacts);
+export default function App () {
+  const [contacts, setContacts] = useLocalStorage('contact', []);
+  const [filter, setFilter] = useState(' ');
 
-    if (parsedContacts) {
-      this.setState({ contacts: parsedContacts });
-    }
-  }
+  
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState.contacts) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-  }
-
-  addContact = ({ name, number }) => {
-    const { contacts } = this.state;
-
+  const addContact = ({ name, number }) => {
     const newContact = {
       id: nanoid(),
       name,
       number,
     };
 
-    contacts.find(
-      (contact) => newContact.name.toLowerCase() === contact.name.toLowerCase()
+    contacts.find(contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
     )
+     
       ? alert(`${newContact.name} is already in contacts`)
-      : this.setState(({ contacts }) => ({
-          contacts: [...contacts, newContact],
-        }));
+      : setContacts([...contacts, newContact]);
+    
+  };
+  
+  
+  const deleteContact = (contactId) => {
+    setContacts( contacts.filter((contact) => contact.id !== contactId));
   };
 
-  deleteContact = (contactId) => {
-    this.setState((prevState) => ({
-      contacts: prevState.contacts.filter(
-        (contact) => contact.id !== contactId
-      ),
-    }));
+  const changeFilter = e => {
+    setFilter(e.target.value);
   };
 
-  changeFilter = (e) => {
-    this.setState({ filter: e.target.value });
-  };
+  const getFilterContacts = contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
+    
+  
 
-  getFilterContacts = () => {
-    const { filter, contacts } = this.state;
-    const normalizedFilter = filter.toLowerCase();
-    return contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
-
-  render() {
-    const { filter } = this.state;
-    const filterContacts = this.getFilterContacts();
+ 
     return (
       <AppContainer>
         <Title>Phonebook</Title>
-        <Form onaddContact={this.addContact} />
+        <Form onaddContact={addContact} />
         <Title> Contacts </Title>
-        <Filter value={filter} onChange={this.changeFilter} />
+        <Filter value={filter} onChange={changeFilter} />
         <ContactsList
-          contacts={filterContacts}
-          onDeleteContact={this.deleteContact}
+          contacts={getFilterContacts}
+          onDeleteContact={deleteContact}
         />
       </AppContainer>
     );
-  }
 }
 
-export default App;
