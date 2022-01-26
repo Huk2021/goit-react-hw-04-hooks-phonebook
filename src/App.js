@@ -14,7 +14,7 @@ export default function App () {
 
   
 
-  const addContact = ({ name, number }) => {
+  const addContact = ( name, number ) => {
     const newContact = {
       id: nanoid(),
       name,
@@ -25,11 +25,12 @@ export default function App () {
     )
      
       ? alert(`${newContact.name} is already in contacts`)
-      : setContacts([...contacts, newContact]);
+      : setContacts(contacts =>  [newContact, ...contacts])
     
   };
-  
-  
+   
+    
+ 
   const deleteContact = (contactId) => {
     setContacts( contacts.filter((contact) => contact.id !== contactId));
   };
