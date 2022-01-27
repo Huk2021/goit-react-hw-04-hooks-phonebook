@@ -9,8 +9,8 @@ import {
 } from "./Form.styled";
 
 export default function Form({ onaddContact } ) {
-  const [name, setName] = useState(' ');
-  const [number, setNumber] = useState(' ');
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
  const handleChange = (e) => {
     const { name, value } = e.currentTarget;

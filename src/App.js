@@ -10,7 +10,7 @@ import ContactsList from "./components/ContactsList/ContactsList";
 
 export default function App () {
   const [contacts, setContacts] = useLocalStorage('contact', []);
-  const [filter, setFilter] = useState(' ');
+  const [filter, setFilter] = useState('');
 
   
 
