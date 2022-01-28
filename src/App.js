@@ -23,10 +23,8 @@ export default function App () {
 
     contacts.find(contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
     )
-     
       ? alert(`${newContact.name} is already in contacts`)
       : setContacts(contacts =>  [newContact, ...contacts])
-    
   };
    
     
